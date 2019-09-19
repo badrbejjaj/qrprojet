@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Sep 19, 2019 at 07:40 AM
--- Server version: 5.7.23
--- PHP Version: 7.2.10
+-- Hôte : 127.0.0.1
+-- Généré le :  jeu. 19 sep. 2019 à 13:50
+-- Version du serveur :  10.1.26-MariaDB
+-- Version de PHP :  7.1.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,38 +19,57 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `qrproject_db`
+-- Base de données :  `qrproject_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Structure de la table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
   `firstname` varchar(60) NOT NULL,
   `lastname` varchar(60) NOT NULL,
   `username` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `phone` int(10) NOT NULL,
   `gender` char(1) NOT NULL,
+  `birth_date` date NOT NULL,
   `password` varchar(255) NOT NULL,
   `confirmation_token` varchar(70) DEFAULT NULL,
-  `confirmed_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
+  `confirmed_at` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `users`
+-- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `email`, `phone`, `gender`, `password`, `confirmation_token`, `confirmed_at`) VALUES
-(49, '', '', 'badrbej', 'badrbej@mail.com', 0, '', '$2y$10$oLs9ZkFh97uSB82f5kqV2eTRsIAtDvwoh1o6uNNTbNgTbNw4eDtzC', NULL, '2019-09-15 17:15:17'),
-(50, '', '', 'azeaze', 'azeaze@ze.dz', 0, 'h', '$2y$10$nWAFHth/9MEaie4G0sBBMOIzZ4JbZY8kwTGB2eGumt/OxBspgYImO', 'y60TpZhAqmbVDkeuc62975bZJGzLsXqOjIkOKH0uqvJ68twseCLwpAJrapMd', NULL),
-(51, 'azeaze', 'azeaze', 'azcssdsdv', 'dvvv@ezfz.cm', 696845065, 'm', '$2y$10$tHNd3aTFOVe/UQaj2KO5i.J00oA0ItWDKJqEtyEVdlhgaJ4B4b2ta', NULL, '2019-09-19 07:26:25');
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `email`, `phone`, `gender`, `birth_date`, `password`, `confirmation_token`, `confirmed_at`) VALUES
+(56, 'bejjaj', 'badr', 'bejjaj', 'bejjajbadr@gmail.com', 1234567890, 'm', '2019-09-10', '$2y$10$K5q20mus5BFYg57NYJx88.MtP.MxYnOC3wWTvpz00/nUk5.0kIN46', 'NYUetKyFoRHQvTPZ2Rqgpk0e5xu1MGYj47Gj8yKoBcZXw4uQbmufLAehRGrD', NULL),
+(55, 'badr', 'bejjaj', 'badrbejjaj', 'badrbejjaj@gmail.com', 696845064, 'm', '1998-11-11', '$2y$10$ZfOE5Gi8xzznFk7ZA8VJXOdyAdJJhog12DXaBRC9MzfRwd4CIl13u', NULL, '2019-09-19 11:43:05'),
+(57, 'AZDEAZD', 'AZDAZD', 'AZDAZD', 'AZDAZD@AZD.zefef', 1234567890, 'm', '2019-09-25', '$2y$10$Yum/CAxN8HuR/ov1A9UC6O3nZZQNZnLYEpZstGKdy88AE8BimcTTe', NULL, '2019-09-19 11:38:56');
+
+--
+-- Index pour les tables déchargées
+--
+
+--
+-- Index pour la table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
