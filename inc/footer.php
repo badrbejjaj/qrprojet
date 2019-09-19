@@ -94,7 +94,10 @@
 
   <!-- Template Main Javascript File -->
   <script src="asset/js/main.js"></script>
- <script> "use strict"; $(window).load(function() { $('.datepicker').datepicker(); } )
+ <script> "use strict"; $(window).load(function() { $('.datepicker').datepicker({
+  format : 'yyyy-mm-dd',
+  autoclose : true
+ }); } )
   </script>
 </body>
 </html>

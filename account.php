@@ -33,17 +33,24 @@ if (isset($_POST['update-profil']))
   
   require_once 'inc/db.php';
   $user_id = $_SESSION['auth']->id ;
-  $email = $_POST['email'];
+  $firstname  = $_POST['firstname'];
+  $lastname = $_POST['lastname'];
   $username = $_POST['username'];
-  debug($username);
-  debug($email);
-  $req = $pdo->prepare('UPDATE users SET username= ? , email= ? WHERE id= ?  ');
-  $req->execute([$username,$email,$user_id]);
+  $email = $_POST['email'];
+  $gender = $_POST['gender'];
+  $phone = $_POST['phone'];
+  $birth = $_POST['birth'];
+
+  $req = $pdo->prepare('UPDATE users SET firstname= ?, lastname= ?, username= ? , email= ?,gender= ?,phone= ?, birth_date= ? WHERE id= ?  ');
+  $req->execute([$firstname,$lastname,$username,$email,$gender,$phone,$birth,$user_id]);
+
   $_SESSION['flash']['success'] = "Informations updated";
+  header('location: logout.php');
+
   
 }
 
-
+debug($_SESSION['auth']);
 
 ?>
 <section id="intro" class="pt-100 pb-100">
@@ -119,7 +126,7 @@ if (isset($_POST['update-profil']))
 		        <div class="card-body">
 		            <div class="row">
 		                <div class="col-md-12">
-		                    <h4>Dashboard</h4>
+		                    <h4>Infos</h4>
 		                    <hr>
 		                </div>
 		            </div>
@@ -133,7 +140,19 @@ if (isset($_POST['update-profil']))
                                 </div>
                               </div>
                               <div class="form-group row">
-                                <label for="username" class="col-4 col-form-label">User Name*</label> 
+                                <label for="username" class="col-4 col-form-label">First Name</label> 
+                                <div class="col-8">
+                                  <input placeholder="<?= $_SESSION['auth']->firstname ?>" class="form-control here" type="text" disabled>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label for="username" class="col-4 col-form-label">Last Name</label> 
+                                <div class="col-8">
+                                  <input placeholder="<?= $_SESSION['auth']->lastname ?>" class="form-control here" type="text" disabled>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label for="username" class="col-4 col-form-label">User Name</label> 
                                 <div class="col-8">
                                   <input placeholder="<?= $_SESSION['auth']->username ?>" class="form-control here" type="text" disabled>
                                 </div>
@@ -142,6 +161,26 @@ if (isset($_POST['update-profil']))
                                 <label for="name" class="col-4 col-form-label">E-mail</label> 
                                 <div class="col-8">
                                   <input placeholder="<?= $_SESSION['auth']->email ?>" class="form-control here" type="text" disabled>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label for="name" class="col-4 col-form-label">Phone</label> 
+                                <div class="col-8">
+                                  <input placeholder="<?= $_SESSION['auth']->phone ?>" class="form-control here" type="text" disabled>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label for="name" class="col-4 col-form-label">Gender</label> 
+                                <div class="col-8">
+                                  <input placeholder="<?php 
+                                  if($_SESSION['auth']->gender == "m") { echo "Men";} else { echo "Women";}
+                                  ?>" class="form-control here" type="text" disabled>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label for="name" class="col-4 col-form-label">Date of birth</label> 
+                                <div class="col-8">
+                                  <input placeholder="<?= $_SESSION['auth']->birth_date ?>" class="form-control here" type="text" disabled>
                                 </div>
                               </div>
                               
@@ -179,8 +218,21 @@ if (isset($_POST['update-profil']))
                                   <input placeholder="<?= $_SESSION['auth']->id ?>" class="form-control here" type="text" disabled>
                                 </div>
                               </div>
+
                               <div class="form-group row">
-                                <label for="username" class="col-4 col-form-label">User Name*</label> 
+                                <label for="lastname" class="col-4 col-form-label">First Name</label> 
+                                <div class="col-8">
+                                  <input value="<?= $_SESSION['auth']->firstname ?>" name="firstname" class="form-control here" type="text" >
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label for="lastname" class="col-4 col-form-label">Last Name</label> 
+                                <div class="col-8">
+                                  <input value="<?= $_SESSION['auth']->lastname ?>" name="lastname" class="form-control here" type="text" >
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label for="username" class="col-4 col-form-label">User Name</label> 
                                 <div class="col-8">
                                   <input value="<?= $_SESSION['auth']->username ?>" name="username" class="form-control here" type="text" >
                                 </div>
@@ -189,6 +241,35 @@ if (isset($_POST['update-profil']))
                                 <label for="email" class="col-4 col-form-label">E-mail</label> 
                                 <div class="col-8">
                                   <input value="<?= $_SESSION['auth']->email ?>" name="email"  class="form-control here" type="text" >
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <label for="phone" class="col-4 col-form-label">Phone</label> 
+                                <div class="col-8">
+                                  <input value="<?= $_SESSION['auth']->phone ?>" name="phone" class="form-control here" type="text" >
+                                </div>
+                              </div>
+                              <!-- Gender -->
+                              <div class="form-row mb-4">
+                                <label for="gender" class="col-4 col-form-label">Gender</label>             
+                              <!-- Option 1 - Female -->
+                              <div class="custom-control custom-radio custom-control-inline justify-content-left">
+                                <input type="radio" class="custom-control-input" id="female" value="f" name="gender" <?php if( $_SESSION['auth']->gender == "f" ) { echo 'checked'; } ?>>
+                                <label class="custom-control-label" for="female" >Female</label>
+                              </div>
+                              
+                              <!-- Option 1 - Male -->
+                              <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" class="custom-control-input" id="male" value="m" name="gender" <?php if( $_SESSION['auth']->gender == "m" ) { echo 'checked'; } ?>>
+                                <label class="custom-control-label" for="male" >Male</label>
+                              </div>
+
+                              </div>
+
+                              <div class="form-group row">
+                                <label for="birth" class="col-4 col-form-label">Date of birth</label> 
+                                <div class="col-8">
+                                  <input value="<?= $_SESSION['auth']->birth_date ?>" name="birth" class="form-control here datepicker" type="text" >
                                 </div>
                               </div>
                               <div class="form-group row">

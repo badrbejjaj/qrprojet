@@ -1,8 +1,7 @@
-<?php require 'inc/header.php' ?>
-<?php require 'inc/functions.php' ?>
-
 <?php 
- 
+require 'inc/header.php';
+require 'inc/functions.php';
+unlogged_only();
  if(!empty($_POST) && !empty($_POST["username"]) && !empty($_POST["password"]) ){
  	require_once 'inc/db.php';
  	require_once 'inc/functions.php'; 	

@@ -1,7 +1,7 @@
 <?php 
 
 require_once 'inc/functions.php';
-session_start();
+unlogged_only();
 
 if(!empty($_POST)) {
 
@@ -15,6 +15,7 @@ if(!empty($_POST)) {
 	$pass = $_POST['password'];
 	$gender = $_POST['gender'];
 	$tel = $_POST['tel'];
+	$birth = $_POST['birth'];
 	$pass_conf = $_POST['password_confirm'];
 
 	if( empty($uname) || !preg_match('/^[a-zA-z0-9_]+$/', $uname) ){
@@ -61,17 +62,17 @@ if(!empty($_POST)) {
 	if ( empty($errors) )
 	{
 	
-	$req = $pdo->prepare("INSERT INTO users SET firstname = ? , lastname = ?, username = ? , password= ? , email = ?, phone= ? , gender= ? , confirmation_token= ? ");
+	$req = $pdo->prepare("INSERT INTO users SET firstname = ? , lastname = ?, username = ? , password= ? , email = ?, phone= ? , gender= ?, birth_date=? , confirmation_token= ? ");
 
 	$password = password_hash($pass, PASSWORD_BCRYPT);
 	$token = str_random(60);
-	$req->execute([ $firstname, $lastname, $uname , $password , $email , $tel ,$gender , $token]);
+	$req->execute([ $firstname, $lastname, $uname , $password , $email , $tel ,$gender,$birth , $token]);
 	$user_id = $pdo->LastInsertId();
 
 
 	$to      =  $email ;
 	$subject = 'confirmation de votre compte';
-	$message = 'Afin de valider votre compte merci de cliquer sur ce lien'."\n\n".'http://localhost/qrproject/confirm.php?id='. $user_id .'&token=' . $token;
+	$message = 'Afin de valider votre compte merci de cliquer sur ce lien'."\n\n".'http://localhost/qrprojet/confirm.php?id='. $user_id .'&token=' . $token;
 	$headers = 'From: webmaster@example.com' . "\r\n" .
 	    'Reply-To: webmaster@example.com' . "\r\n" .
 	    'X-Mailer: PHP/' . phpversion();
@@ -122,6 +123,7 @@ if(!empty($_POST)) {
 							<?php endforeach ?>
 							<?php unset($_SESSION["flash"]); ?>
 						<?php endif ?>
+
 				    <div class="form-row mb-4">	
 				        <div class="col">
 				            <!-- First name -->
@@ -140,7 +142,9 @@ if(!empty($_POST)) {
 				    <input type="email" id="email" class="form-control mb-4" name="email" placeholder="E-mail"
 				    value="<?php if(isset($_POST['register'])){ echo $_POST['email']; } ?>">
 					
-					 <div class="form-row mb-4">
+					<!-- Gender -->
+					<div class="form-row mb-4">
+
 					<!-- Option 1 - Female -->
 					<div class="custom-control custom-radio custom-control-inline justify-content-left">
 					  <input type="radio" class="custom-control-input" id="female" value="f" name="gender" <?php if(isset($_POST['register']) && $_POST['gender'] == "f" ) { echo 'checked'; } ?>>
@@ -155,19 +159,18 @@ if(!empty($_POST)) {
 
 					</div>
 
-				    <!-- Password -->
+					<!-- Phone number -->
+					<input type="text" id="defaultRegisterPhonePassword" name="tel" class="form-control mb-4" placeholder="Phone number" aria-describedby="defaultRegisterFormPhoneHelpBlock" pattern="[0-9]{10}" value="<?php if(isset($_POST['register'])){ echo $_POST['tel']; } ?>">
+
+					<!-- Birth date -->
+				    <input type="text" id="user1" placeholder="yyyy-mm-dd" name="birth" class="form-control datepicker mb-4" value="<?php if(isset($_POST['register'])){ echo $_POST['birth']; } ?>">
+
+					<!-- Password -->
 				    <input type="password" name="password" id="password" class="form-control mb-3" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock">
 				    <input type="password" name="password_confirm" id="password_confirm" class="form-control" placeholder="Confirmation Password" >
 				    <small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
 				        At least 8 characters and 1 digit
 				    </small>
-				    <script> "use strict"; $(window).load(function() { $('.datepicker').datepicker(); } )
-  </script>
-				    <div class="dates"><label for=""></label><input type="text" id="user1" placeholder="yyyy-mm-dd" class="form-control datepicker mb-4"></div>
-				    <!-- Phone number -->
-				    <input type="text" id="defaultRegisterPhonePassword" name="tel" class="form-control mb-4" placeholder="Phone number" aria-describedby="defaultRegisterFormPhoneHelpBlock" pattern="[0-9]{10}" value="<?php if(isset($_POST['register'])){ echo $_POST['tel']; } ?>">
-
-
 				    <!-- Sign up button -->
 				    <button class="btn btn-info my-4 btn-block" name="register" type="submit">Sign in</button>
 

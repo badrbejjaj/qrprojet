@@ -18,11 +18,23 @@ function logged_only() {
 		{
 			session_start();
 		}
-		
 	if(!isset($_SESSION['auth'])){
 		
 		$_SESSION['flash']['danger'] = "You must have an account if you already have one please login";
 		header('location: login.php');
+		exit();
+
+	}
+}
+function unlogged_only() {
+	if(session_status() == PHP_SESSION_NONE)
+		{
+			session_start();
+		}
+	if(isset($_SESSION['auth'])){
+		
+		$_SESSION['flash']['success'] = "you already logged";
+		header('location: account.php');
 		exit();
 
 	}
